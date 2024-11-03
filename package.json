@@ -1,0 +1,64 @@
+{
+  "name": "phone-messenger",
+  "private": true,
+  "version": "1.0.0",
+  "author": "Thinh Nguyen",
+  "scripts": {
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "prettier:fix": "prettier --write \"./**/*.{ts,js,vue}\"",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "check-types": "nuxi typecheck --noEmit --skipLibCheck",
+    "run-test": "vitest run",
+    "lint-staged": "yarn lint && yarn check-types"
+  },
+  "dependencies": {
+    "@gtm-support/vue-gtm": "3.0.1",
+    "@nuxt/image": "1.7.0",
+    "@nuxt/scripts": "^0.9.4",
+    "@nuxtjs/device": "3.1.1",
+    "@nuxtjs/ionic": "^0.15.1",
+    "@pinia/nuxt": "0.5.2",
+    "dayjs": "1.11.12",
+    "lodash": "4.17.21",
+    "nuxt": "3.12.4",
+    "pinia": "2.2.0",
+    "sass": "1.77.8",
+    "v-lazy-image": "2.1.1",
+    "vee-validate": "4.13.2",
+    "vue": "3.4.38",
+    "yup": "1.4.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "19.4.0",
+    "@commitlint/config-conventional": "19.2.2",
+    "@nuxt/eslint": "0.5.0",
+    "@nuxt/fonts": "0.7.1",
+    "@nuxtjs/robots": "4.1.7",
+    "@nuxtjs/sitemap": "6.1.1",
+    "@nuxtjs/tailwindcss": "6.12.1",
+    "@pinia-plugin-persistedstate/nuxt": "1.2.1",
+    "@types/lodash": "4.17.7",
+    "@vueuse/core": "10.11.0",
+    "@vueuse/nuxt": "10.11.0",
+    "eslint": "9.9.0",
+    "eslint-config-prettier": "9.1.0",
+    "husky": "9.1.4",
+    "jsdom": "24.1.1",
+    "typescript": "5.5.4",
+    "vite-plugin-minify": "2.0.0",
+    "vitest": "2.0.5",
+    "vue-tsc": "2.0.29"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}

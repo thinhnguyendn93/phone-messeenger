@@ -1,0 +1,75 @@
+name: ESLint and Checking Typescript
+
+on:
+  pull_request:
+    branches: ['*']
+
+jobs:
+  lint-n-tsc:
+    runs-on: ubuntu-latest
+    name: Run eslint
+
+    steps:
+      - name: Install OpenVPN
+        run: |
+          sudo apt update
+          sudo apt install -y openvpn openvpn-systemd-resolved
+          echo "${{ secrets.VPN }}" > config.ovpn
+
+      - name: Connect to OpenVPN
+        uses: kota65535/github-openvpn-connect-action@v2
+        with:
+          config_file: config.ovpn
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Branch name
+        run: |
+          echo running on branch ${GITHUB_REF##*/}
+          sudo ifconfig tun0 down
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: v18.18.0
+
+      - name: Install yarn and pnpm
+        run: corepack enable
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: v18.18.0
+          registry-url: https://registry.npmjs.org/
+
+      - name: Clear Yarn cache
+        run: yarn cache clean
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install dependencies
+        run: yarn install --registry https://registry.npmjs.org/
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_OPTIONS: '--max-old-space-size=8192'
+
+      - name: Build app
+        run: yarn build
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Run eslint
+        run: yarn lint
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Run checking typescript
+        run: yarn check-types
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Run unit tests
+        run: yarn run-test
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

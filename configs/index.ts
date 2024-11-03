@@ -1,0 +1,1 @@
+export const IGNORE_LEFT_SIDEBAR_URL_NAME = ''
