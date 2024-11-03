@@ -29,22 +29,8 @@ export default defineNuxtConfig({
   features: {
     inlineStyles: false,
   },
-  robots: {
-    groups: [
-      {
-        userAgent: [''],
-        disallow: ['/account/'],
-        allow: ['/'],
-      },
-    ],
-    sitemap: [
-      '/sitemap-general.xml',
-      '/sitemap-promotions.xml',
-      '/sitemap-categories.xml',
-    ],
-  },
   fonts: {
-    families: [{ name: 'Inter', provider: 'google' }],
+    families: [{ name: 'Roboto', provider: 'google' }],
     defaults: {
       weights: [400],
       styles: ['normal', 'italic'],
@@ -73,25 +59,13 @@ export default defineNuxtConfig({
     dayjs: '/node_modules/dayjs/esm/index.js',
     lodash: '/node_modules/lodash',
     yup: '/node_modules/yup/index.esm.js', // Add alias
-    'socket.io-client': '/node_modules/socket.io-client/lib/index.js', // Add alias
-    'vuejs-paginate-next':
-      '/node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js', // Add alias
+  },
+  tailwindcss: {
+    viewer: false,
   },
   vite: {
     build: {
       sourcemap: true,
-    },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `
-              @import "~/assets/styles/base/variables";
-              @import "~/assets/styles/base/mixins";
-              @import "~/assets/styles/base/common";
-              @import "~/assets/styles/base/function";
-            `,
-        },
-      },
     },
     plugins: [
       ViteMinifyPlugin({
@@ -101,31 +75,10 @@ export default defineNuxtConfig({
       }),
     ],
   },
-  scripts: {
-    registry: {
-      googleAnalytics: {
-        id: process.env.GOOGLE_ANALYTICS_ID ?? '',
-      },
-      metaPixel: {
-        id: process.env.META_PIXEL_ID ?? '',
-      },
-    },
-  },
   runtimeConfig: {
     public: {
       // your public env
-      GO88_URL: process.env.GO88_URL,
-      DEPOSIT_METHODS_ENABLED: process.env.DEPOSIT_METHODS_ENABLED || '',
-      PHONE_CARD_PROVIDERS_ENABLED:
-        process.env.PHONE_CARD_PROVIDERS_ENABLED || '',
-      MAIN_CREDIT_UNIT: process.env.MAIN_CREDIT_UNIT,
-      FLAT_CURRENCY_UNIT: process.env.FLAT_CURRENCY_UNIT,
-      TELEGRAM_NAME: process.env.TELEGRAM_NAME,
-      TELEGRAM_LINK: process.env.TELEGRAM_LINK || '',
-      TELEGRAM_CHAT_BOT: process.env.TELEGRAM_CHAT_BOT || '',
-      YOUTUBE_LINK: process.env.YOUTUBE_LINK || '',
-      FANPAGE_LINK: process.env.FANPAGE_LINK || '',
-      SPORT_ENABLES: process.env.SPORT_ENABLES || '',
+      API_URL: process.env.API_URL,
     },
   },
   compatibilityDate: '2024-08-02',

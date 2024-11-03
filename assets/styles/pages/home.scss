@@ -1,0 +1,169 @@
+.home {
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100%;
+
+  &__left-content {
+    flex: 0 0 417px;
+    border-right: 1px solid var(--pinger-theme-divider);
+  }
+
+  &__right-content {
+    flex: 1;
+  }
+}
+
+.conversation {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__action {
+    height: 36px;
+  }
+
+  &__header {
+    border-bottom: 1px solid var(--pinger-theme-divider);
+    height: 71px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 16px;
+
+    h1 {
+      color: var(--pinger-theme-on-primary);
+      font-style: normal;
+      font-weight: 600;
+      line-height: 24px;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-left: 16px;
+    }
+  }
+
+  &__content {
+    flex: 1 1 auto;
+  }
+
+  &__conversation {
+    display: flex;
+    cursor: pointer;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    &--selected {
+      &::part(native) {
+        background-color: var(--pinger-theme-container-lowest);
+
+        .item-inner {
+          border: none !important;
+        }
+      }
+    }
+  }
+
+  &__conversation-info {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+  }
+}
+
+.messages {
+  display: flex;
+  justify-content: space-between;
+
+  &__info {
+    width: calc(100% - 60px);
+
+    h2 {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 20px;
+      align-items: center;
+      color: var(--pinger-theme-on-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    p {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 16px;
+      display: inline;
+      color: var(--pinger-theme-on-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+    }
+  }
+
+  &__time {
+    width: 52px;
+    margin-left: 4px;
+    margin-bottom: 0;
+    margin-left: 8px;
+
+    p {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: right;
+      color: var(--pinger-theme-on-secondary);
+      white-space: nowrap;
+    }
+
+  }
+}
+
+.communications {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__header {
+    border-bottom: 1px solid var(--pinger-theme-divider);
+    height: 71px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 16px;
+  }
+
+  &__action {
+    font-size: 16px;
+    line-height: 17px;
+    font-weight: 600;
+    letter-spacing: initial;
+    text-transform: none;
+    font-family: Aileron;
+    background-color: var(--pinger-app-primary);
+    height: 40px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    color: white;
+  }
+
+  &__content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__messages {
+    flex: 1 1 auto;
+    padding: 16px;
+    overflow: hidden;
+  }
+
+  &__footer {
+    height: 86px;
+    padding-left: 16px;
+    padding-right: 32px;
+  }
+}

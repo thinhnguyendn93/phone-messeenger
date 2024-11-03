@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?ny7769');
-  src:  url('fonts/icomoon.eot?ny7769#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?ny7769') format('truetype'),
-    url('fonts/icomoon.woff?ny7769') format('woff'),
-    url('fonts/icomoon.svg?ny7769#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?rgbmwi');
+  src:  url('fonts/icomoon.eot?rgbmwi#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?rgbmwi') format('truetype'),
+    url('fonts/icomoon.woff?rgbmwi') format('woff'),
+    url('fonts/icomoon.svg?rgbmwi#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,161 +25,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-all:before {
-  content: "\e911";
-}
-.icon-eye-slash:before {
-  content: "\e90e";
-}
-.icon-lock:before {
-  content: "\e90c";
-  color: #5b6885;
-}
-.icon-verify:before {
-  content: "\e903";
-}
-.icon-heart-full:before {
-  content: "\e906";
-}
-.icon-delete:before {
-  content: "\e90b";
-}
-.icon-calendar:before {
+.icon-add:before {
   content: "\e900";
 }
-.icon-search:before {
+.icon-arrow-up:before {
   content: "\e901";
 }
-.icon-alert:before {
+.icon-icon:before {
   content: "\e902";
 }
-.icon-eye:before {
-  content: "\e904";
-}
-.icon-edit:before {
-  content: "\e905";
-}
-.icon-check:before {
-  content: "\e907";
-}
-.icon-close:before {
-  content: "\e908";
-}
-.icon-minus:before {
-  content: "\e909";
-  color: #5f6368;
-}
-.icon-plus-squared:before {
-  content: "\e90a";
-}
-.icon-lock-open:before {
-  content: "\e90d";
-}
-.icon-flash:before {
-  content: "\e90f";
-}
-.icon-plus-circle:before {
-  content: "\e910";
-}
-.icon-up:before {
-  content: "\e913";
-}
-.icon-down:before {
-  content: "\e914";
-}
-.icon-right:before {
-  content: "\e915";
-}
-.icon-left:before {
-  content: "\e916";
-}
-.icon-close-popup:before {
-  content: "\e917";
-}
-.icon-ezugi:before {
-  content: "\e918";
-}
-.icon-vivogaming:before {
-  content: "\e919";
-}
-.icon-evolution:before {
-  content: "\e91a";
-}
-.icon-instant-games:before {
-  content: "\e91b";
-}
-.icon-dial:before {
-  content: "\e91c";
-}
-.icon-other-games:before {
-  content: "\e91d";
-}
-.icon-quick-games:before {
-  content: "\e91e";
-}
-.icon-lottery:before {
-  content: "\e91f";
-}
-.icon-fish:before {
-  content: "\e920";
-}
-.icon-wallet:before {
-  content: "\e921";
-}
-.icon-recent:before {
-  content: "\e922";
-}
-.icon-heart:before {
-  content: "\e923";
-}
-.icon-info:before {
-  content: "\e924";
-}
-.icon-news:before {
-  content: "\e925";
-}
-.icon-trending:before {
-  content: "\e926";
-}
-.icon-game-card:before {
-  content: "\e927";
-}
-.icon-slots:before {
-  content: "\e928";
-}
-.icon-schedule:before {
-  content: "\e929";
-}
-.icon-live:before {
-  content: "\e92a";
-}
-.icon-rank:before {
-  content: "\e92b";
-}
-.icon-hot:before {
-  content: "\e92c";
-}
-.icon-new:before {
-  content: "\e92d";
-}
-.icon-promotion:before {
-  content: "\e92e";
-}
-.icon-search-game:before {
-  content: "\e92f";
-}
-.icon-table-games:before {
-  content: "\e930";
-}
-.icon-casino:before {
-  content: "\e931";
-}
-.icon-menu:before {
-  content: "\e932";
-}
-.icon-sport:before {
-  content: "\e933";
-}
-.icon-plus:before {
-  content: "\e935";
+.icon-send:before {
+  content: "\e903";
 }

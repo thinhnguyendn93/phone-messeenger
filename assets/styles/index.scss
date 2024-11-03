@@ -1,3 +1,9 @@
+@import "./base/ionic.scss";
+@import "./components/layout.scss";
+@import "./components/chat-input.scss";
+@import "./custom/ionic.scss";
+@import "./pages/home.scss";
+
 :root {
   font-family: "Inter", sans-serif;
   scroll-padding-top: 100px;
