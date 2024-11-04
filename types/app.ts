@@ -51,7 +51,7 @@ export interface BaseResponse<T> {
 export type UserStore = {
   user: User
   communications: Communication[]
-  currentPingerPhone?: PingerPhone
+  currentPingerPhone: PingerPhone
 }
 
 export type PhoneConversationResult = {
@@ -64,28 +64,29 @@ export type PhoneConversationResponse = {
 }
 
 interface From {
-  TN: string;
-  own: boolean;
+  TN: string
+  own: boolean
 }
 
 interface To {
-  TN: string;
-  name: string;
+  TN: string
+  name: string
 }
 
 interface Message {
-  text: string;
-  id: string;
-  myStatus: string;
-  timeCreated: string;
-  direction: string;
+  text: string
+  id: string
+  myStatus: string
+  timeCreated: string
+  direction: string
+  showDate?: boolean
 }
 
 export interface Communication {
-  type: string;
-  direction: string;
-  from: From;
-  to: To[];
-  messages: Message[];
-  timeCreated: string;
+  type: string
+  direction: string
+  from: From
+  to: To[]
+  messages: Message[]
+  timeCreated: string
 }

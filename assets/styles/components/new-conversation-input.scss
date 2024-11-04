@@ -1,0 +1,13 @@
+.new-conversation-input {
+  outline: none;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  input {
+    height: 40px;
+    outline: none;
+    flex: 1 1 auto;
+    font-size: 14px;
+  }
+}

@@ -92,3 +92,30 @@ export const formatTime = (timestamp: any) => {
     hour12: true,
   })
 }
+
+export const formatDate = (dateTime: any) => {
+  const date = new Date(dateTime)
+  return date.toLocaleDateString([], {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  }) // e.g., "Friday, Oct 25"
+}
+
+export const formatPhoneNumbers = (value: string) => {
+  const numbers = value
+    .split(',')
+    .map((num) => num.trim())
+    .filter((num) => num.length > 0) // Split by comma, trim and filter
+  const formattedNumbers = numbers.map((num) => {
+    const cleaned = num.replace(/[^0-9]/g, '') // Remove non-numeric characters
+    if (cleaned.length === 10) {
+      return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
+        6,
+        10,
+      )}` // Format full number
+    }
+    return cleaned // Return cleaned number if less than 10 digits
+  })
+  return formattedNumbers.join(', ') // Join formatted numbers with a comma and space
+}

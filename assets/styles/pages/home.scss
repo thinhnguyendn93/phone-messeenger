@@ -127,11 +127,25 @@
 
   &__header {
     border-bottom: 1px solid var(--pinger-theme-divider);
-    height: 71px;
+    min-height: 71px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding: 0 16px;
+  }
+
+  &__header-title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 20px;
+    align-items: center;
+    color: var(--pinger-theme-on-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
   }
 
   &__action {
@@ -164,6 +178,12 @@
     height: 86px;
     padding-left: 16px;
     padding-right: 32px;
+  }
+
+  &__new-conversation-input {
+    height: 40px;
+    outline: none;
+    width: 100%;
   }
 }
 

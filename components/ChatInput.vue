@@ -12,6 +12,7 @@ const onSendClick = () => {
 const handleKeyPress = (event: any) => {
   if (event.key === 'Enter') {
     onSendClick()
+    event.preventDefault()
   }
 }
 </script>

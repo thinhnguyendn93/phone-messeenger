@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { definePageMeta } from '#imports'
-import { formatTime } from '~/utils/helper'
+import { formatTime, formatDate } from '~/utils/helper'
 
 const userStore = useUserStore()
 const { communications } = storeToRefs(userStore)
@@ -12,20 +12,36 @@ definePageMeta({
 })
 
 const selectedCommunicationIndex = ref(0)
+const isComposingNew = ref(false)
 
 const selectedCommunication = computed(() => {
   const result = communications.value[selectedCommunicationIndex.value]
   if (!result) return null
+  let lastMessageDate = ''
   result.messages.sort(
     (a, b) =>
       new Date(a.timeCreated).getTime() - new Date(b.timeCreated).getTime(),
   )
+
+  result.messages.forEach((message) => {
+    const messageDate = formatDate(message.timeCreated)
+    if (messageDate !== lastMessageDate) {
+      message.showDate = true
+      lastMessageDate = messageDate
+    }
+  })
 
   return result
 })
 
 const handleItemClick = (index: number) => {
   selectedCommunicationIndex.value = index
+  isComposingNew.value = false
+}
+
+const onComposeClick = () => {
+  isComposingNew.value = true
+  selectedCommunicationIndex.value = -1
 }
 </script>
 
@@ -75,41 +91,15 @@ const handleItemClick = (index: number) => {
     <div class="home__right-content">
       <div class="communications">
         <div class="communications__header">
-          <button class="communications__action">Compose</button>
+          <button class="communications__action" @click="onComposeClick">
+            Compose
+          </button>
         </div>
-        <div class="communications__content">
-          <div class="communications__messages">
-            <ion-content v-if="selectedCommunication">
-              <ion-list lines="none">
-                <template
-                  v-for="message in selectedCommunication?.messages"
-                  :key="message.id"
-                >
-                  <small
-                    v-if="message.direction === 'out'"
-                    class="text-muted me-2"
-                    >{{ formatTime(message.timeCreated) }}</small
-                  >
-                  <ion-item>
-                    <ion-label
-                      :class="{
-                        message: true,
-                        'message--received': message.direction === 'in',
-                      }"
-                    >
-                      <div class="message__content">
-                        {{ message.text }}
-                      </div>
-                    </ion-label>
-                  </ion-item>
-                </template>
-              </ion-list>
-            </ion-content>
-          </div>
-          <div class="communications__footer">
-            <chat-input />
-          </div>
-        </div>
+        <compose-conversation v-if="isComposingNew" />
+        <phone-conversation
+          v-if="selectedCommunication && !isComposingNew"
+          :conversation="selectedCommunication"
+        />
       </div>
     </div>
   </div>
