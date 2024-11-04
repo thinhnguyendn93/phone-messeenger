@@ -81,17 +81,28 @@ const handleItemClick = (index: number) => {
           <div class="communications__messages">
             <ion-content v-if="selectedCommunication">
               <ion-list lines="none">
-                <ion-item
+                <template
                   v-for="message in selectedCommunication?.messages"
                   :key="message.id"
-                  class="message"
                 >
-                  <ion-label>
-                    <div class="messages">
-                      {{ message.text }}
-                    </div>
-                  </ion-label>
-                </ion-item>
+                  <small
+                    v-if="message.direction === 'out'"
+                    class="text-muted me-2"
+                    >{{ formatTime(message.timeCreated) }}</small
+                  >
+                  <ion-item>
+                    <ion-label
+                      :class="{
+                        message: true,
+                        'message--received': message.direction === 'in',
+                      }"
+                    >
+                      <div class="message__content">
+                        {{ message.text }}
+                      </div>
+                    </ion-label>
+                  </ion-item>
+                </template>
               </ion-list>
             </ion-content>
           </div>

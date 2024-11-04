@@ -117,7 +117,6 @@
       color: var(--pinger-theme-on-secondary);
       white-space: nowrap;
     }
-
   }
 }
 
@@ -165,5 +164,30 @@
     height: 86px;
     padding-left: 16px;
     padding-right: 32px;
+  }
+}
+
+.message {
+  display: flex !important;
+  justify-content: flex-end;
+
+  &--received {
+    justify-content: flex-start;
+  }
+
+  &__content {
+    text-align: right;
+    background-color: var(--pinger-app-primary);
+    color: white !important;
+    hyphens: manual;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 1rem;
+    text-align: left;
+    letter-spacing: 0;
+    line-height: 21px;
+    width: 100%;
+    display: block;
+    width: fit-content;
   }
 }
