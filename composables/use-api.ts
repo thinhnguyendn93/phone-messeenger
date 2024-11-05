@@ -6,13 +6,11 @@ export function useAPI() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const request = async <R, T>(
     url: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params?: any,
     method: string = 'GET',
   ): Promise<T> => {
     const environment = useRuntimeConfig()
     const isGet = method === 'GET'
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const opts: any = {
       key: hash(['api-fetch', url, params]),
       retry: 0,

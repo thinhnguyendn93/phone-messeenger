@@ -175,9 +175,10 @@
   }
 
   &__footer {
-    height: 86px;
+    min-height: 86px;
     padding-left: 16px;
     padding-right: 32px;
+    padding-bottom: 48px;
   }
 
   &__new-conversation-input {

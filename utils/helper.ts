@@ -119,3 +119,18 @@ export const formatPhoneNumbers = (value: string) => {
   })
   return formattedNumbers.join(', ') // Join formatted numbers with a comma and space
 }
+
+export const readFile = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = async (e) => {
+      try {
+        const result = e.target?.result as string
+        resolve(result)
+      } catch (error) {
+        reject(error)
+      }
+    }
+    reader.readAsDataURL(file)
+  })
+}

@@ -1,0 +1,36 @@
+.uploaded-attachment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  position: relative;
+
+  img {
+    width: 40px;
+    height: 40px;
+  }
+
+  &:hover {
+    i {
+      display: block;
+      transition: all 0.3s;
+    }
+  }
+
+  i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    display: none;
+    border-radius: 50%;
+    background-color: #c5001010;
+
+    &::before {
+      color: #c5000f;
+      cursor: pointer;
+    }
+  }
+}

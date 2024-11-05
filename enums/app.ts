@@ -6,3 +6,9 @@ export enum AuthTabEnum {
 export enum ResponseStatus {
   OK = 'OK',
 }
+
+export enum FileTypeEnum {
+  Image = 'image',
+  Audio = 'audio',
+  Pdf = 'pdf',
+}

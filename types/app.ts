@@ -91,3 +91,18 @@ export interface Communication {
   messages: Message[]
   timeCreated: string
 }
+
+interface Meta {
+  key: string
+}
+
+export interface UploadResponse {
+  id: string
+  filename: string
+  meta: Meta
+  uploaded: string
+  requireSignedURLs: boolean
+  variants: string[]
+  originalFile: File
+  fileType: string
+}
