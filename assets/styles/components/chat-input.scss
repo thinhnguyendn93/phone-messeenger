@@ -9,6 +9,7 @@
 
   .icon-add {
     color: var(--ion-color-suva-gray);
+    cursor: pointer;
   }
 
   &__icon {
@@ -48,6 +49,14 @@
 
     &:disabled {
       background-color: var(--ion-color-gray-light1);
+    }
+  }
+
+  &__attach-item {
+    cursor: pointer;
+
+    i {
+      margin-right: 8px;
     }
   }
 }

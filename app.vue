@@ -1,7 +1,7 @@
 <script setup>
-import { useUserService } from './services/use-user-service'
+import { useUserServices } from './services/use-user-services'
 
-const { fetchUserInfo } = useUserService()
+const { fetchUserInfo } = useUserServices()
 
 onMounted(() => {
   fetchUserInfo()

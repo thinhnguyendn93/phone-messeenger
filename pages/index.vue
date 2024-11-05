@@ -1,14 +1,31 @@
 <script lang="ts" setup>
 import { definePageMeta } from '#imports'
+import { useUserServices } from '~/services/use-user-services'
 import { formatTime, formatDate } from '~/utils/helper'
 
 const userStore = useUserStore()
-const { communications } = storeToRefs(userStore)
+const { fetchUserConversations } = useUserServices()
+const { communications, currentPingerPhone } = storeToRefs(userStore)
+
+const FETCH_CONVERSATION_INTERVAL = 5000
+
+const interval = ref<NodeJS.Timeout>()
 
 definePageMeta({
   pageTransition: {
     mode: 'default',
   },
+})
+
+onMounted(() => {
+  clearInterval(interval.value)
+  interval.value = setInterval(() => {
+    fetchUserConversations(currentPingerPhone.value)
+  }, FETCH_CONVERSATION_INTERVAL)
+})
+
+onUnmounted(() => {
+  clearInterval(interval.value)
 })
 
 const selectedCommunicationIndex = ref(0)
@@ -42,6 +59,11 @@ const handleItemClick = (index: number) => {
 const onComposeClick = () => {
   isComposingNew.value = true
   selectedCommunicationIndex.value = -1
+}
+
+const onConversationCreated = () => {
+  selectedCommunicationIndex.value = communications.value.length - 1
+  isComposingNew.value = false
 }
 </script>
 
@@ -95,12 +117,21 @@ const onComposeClick = () => {
             Compose
           </button>
         </div>
-        <compose-conversation v-if="isComposingNew" />
+        <compose-conversation
+          v-if="isComposingNew"
+          @create-conversation="onConversationCreated"
+        />
         <phone-conversation
           v-if="selectedCommunication && !isComposingNew"
+          :key="selectedCommunicationIndex"
           :conversation="selectedCommunication"
         />
       </div>
     </div>
   </div>
 </template>
+<style>
+ion-toast {
+  --width: 300px;
+}
+</style>

@@ -1,20 +1,34 @@
 <script lang="ts" setup>
+import { usePhoneServices } from '~/services/use-phone-services'
 import type { Communication } from '~/types/app'
 import { formatDate, formatTime } from '~/utils/helper'
 
-defineProps({
+const { sendMessage } = usePhoneServices()
+
+const props = defineProps({
   conversation: {
     type: Object as PropType<Communication>,
     required: true,
   },
 })
 
-const onSend = (text: string) => {
-  console.log('Sending message:', text)
-  document.getElementById('scroll-content')?.scrollIntoView({
-    behavior: 'smooth',
-  })
+const scrollToLastMessage = () => {
+  setTimeout(() => {
+    document.getElementById('scroll-content')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    })
+  }, 200)
 }
+
+const onSend = async (text: string) => {
+  await sendMessage(props.conversation.to, text)
+  scrollToLastMessage()
+}
+
+onMounted(() => {
+  scrollToLastMessage()
+})
 </script>
 <template>
   <div class="communications__content">

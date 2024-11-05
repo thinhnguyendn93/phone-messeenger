@@ -2,7 +2,7 @@ import { useAPI } from '~/composables/use-api'
 import type { PhoneConversationResponse, PingerPhone, User } from '~/types/app'
 import { groupCommunications } from '~/utils/helper'
 
-export const useUserService = () => {
+export const useUserServices = () => {
   const userStore = useUserStore()
   const { get, post } = useAPI()
 

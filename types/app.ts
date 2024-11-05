@@ -61,6 +61,7 @@ export type PhoneConversationResult = {
 
 export type PhoneConversationResponse = {
   result: PhoneConversationResult[]
+  success: string
 }
 
 interface From {

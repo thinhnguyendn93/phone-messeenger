@@ -1,4 +1,13 @@
 <script lang="ts" setup>
+defineProps({
+  modelValue: {
+    type: Object as PropType<string[]>,
+    required: true,
+  },
+})
+
+const emits = defineEmits(['update:modelValue'])
+
 const value = ref<string>('')
 
 const phoneNumbers = ref<string[]>([])
@@ -11,6 +20,7 @@ const onKeyDown = (event: KeyboardEvent) => {
 
   if (event.key === 'Backspace' && value.value === '') {
     phoneNumbers.value.pop()
+    emits('update:modelValue', phoneNumbers.value)
   }
 }
 
@@ -29,6 +39,7 @@ const addPhoneNumber = () => {
   if (value.value) {
     phoneNumbers.value.push(formatPhoneNumbers(value.value))
     value.value = ''
+    emits('update:modelValue', phoneNumbers.value)
   }
 }
 </script>
