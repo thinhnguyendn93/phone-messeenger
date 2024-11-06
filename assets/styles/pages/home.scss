@@ -192,8 +192,30 @@
   display: flex !important;
   justify-content: flex-end;
 
+  &__media {
+    width: 100%;
+    max-width: 150px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
   &--received {
     justify-content: flex-start;
+
+    .message__content {
+      justify-content: flex-start;
+    }
+
+    .message__media {
+      justify-content: flex-start;
+    }
   }
 
   &__content {

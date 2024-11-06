@@ -1,5 +1,5 @@
 import { useAPI } from '~/composables/use-api'
-import type { PhoneConversationResponse } from '~/types/app'
+import type { Media, PhoneConversationResponse } from '~/types/app'
 import { useUserServices } from './use-user-services'
 
 export const usePhoneServices = () => {
@@ -8,12 +8,13 @@ export const usePhoneServices = () => {
   const { fetchUserConversations } = useUserServices()
   const { post } = useAPI()
 
-  const sendMessage = async (toPhones: any, message: string) => {
+  const sendMessage = async (toPhones: any, message: string, media?: Media) => {
     try {
       const currentPhone = userStore.getCurrentPingerPhone()
       const MESSAGE_API_BODY = {
         to: toPhones,
         text: message,
+        media,
       }
       const response = await post<
         typeof MESSAGE_API_BODY,

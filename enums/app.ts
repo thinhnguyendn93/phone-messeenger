@@ -11,4 +11,5 @@ export enum FileTypeEnum {
   Image = 'image',
   Audio = 'audio',
   Pdf = 'pdf',
+  Video = 'video',
 }

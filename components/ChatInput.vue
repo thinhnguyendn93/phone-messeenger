@@ -12,43 +12,88 @@ const value = ref<string>()
 const emits = defineEmits(['send'])
 const isOpenAttachPopover = ref(false)
 const event = ref<Event>()
-const pdfInput = ref<HTMLInputElement>()
+const videoInput = ref<HTMLInputElement>()
 const imageInput = ref<HTMLInputElement>()
-const audioInput = ref<HTMLInputElement>()
 
 const uploadedImages = ref<UploadResponse[]>([])
-const uploadedPdfs = ref<UploadResponse[]>([])
-const uploadedAudios = ref<UploadResponse[]>([])
+const uploadedVideos = ref<UploadResponse[]>([])
 
-const disabledSend = computed(
-  () =>
-    !value.value &&
-    uploadedImages.value.length === 0 &&
-    uploadedPdfs.value.length === 0,
-)
+const mediaRecorder = ref<MediaRecorder>()
+// const audioChunks = ref<Blob[]>([])
+const isRecording = ref(false)
+const audioUrl = ref<string>()
 
-const uploadPdfClick = () => {
-  pdfInput.value?.click()
-}
+const disabledSend = computed(() => {
+  if (uploadedImages.value.length > 0) {
+    return uploadedImages.value.some((item) => item.isUploading)
+  }
+
+  return !value.value && uploadedVideos.value.length === 0 && !audioUrl.value
+})
+
+// const uploadPdfClick = () => {
+//   videoInput.value?.click()
+// }
 
 const uploadImageClick = () => {
   imageInput.value?.click()
 }
 
-const uploadAudioClick = () => {
-  audioInput.value?.click()
+// const uploadAudioClick = async () => {
+//   isRecording.value = true
+//   audioUrl.value = ''
+//   const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+//   mediaRecorder.value = new MediaRecorder(stream)
+
+//   mediaRecorder.value.ondataavailable = (event) => {
+//     audioChunks.value.push(event.data)
+//   }
+
+//   mediaRecorder.value.onstop = () => {
+//     isRecording.value = false
+//     const audioBlob = new Blob(audioChunks.value, { type: 'audio/wav' })
+//     audioUrl.value = URL.createObjectURL(audioBlob)
+//     audioChunks.value = []
+//     console.log('Recording stopped, audio available.')
+//   }
+
+//   mediaRecorder.value.start()
+// }
+
+const onStopRecording = () => {
+  mediaRecorder.value?.stop()
+  console.log('Recording stopped.')
 }
 
-const UPLOAD_ITEMS = [
-  { icon: 'icon-pdf', text: 'PDF', onClick: uploadPdfClick },
-  { icon: 'icon-image', text: 'Image', onClick: uploadImageClick },
-  { icon: 'icon-audio', text: 'Audio', onClick: uploadAudioClick },
-]
+// TODO: video & audio upload will be implemented later
+const UPLOAD_ITEMS = computed(() => [
+  // { icon: 'icon-video', text: 'Video', onClick: uploadPdfClick },
+  {
+    icon: 'icon-image',
+    text: 'Image',
+    onClick: uploadImageClick,
+    disabled: uploadedImages.value.length > 0,
+  },
+  // {
+  //   icon: 'icon-audio',
+  //   text: 'Audio',
+  //   onClick: uploadAudioClick,
+  //   disabled: Boolean(audioUrl.value),
+  // },
+])
 
 const onSendClick = () => {
   if (!disabledSend.value) {
-    emits('send', value.value)
+    emits('send', {
+      text: value.value,
+      images: uploadedImages.value,
+      videos: uploadedVideos.value,
+      audio: audioUrl.value,
+    })
     value.value = undefined
+    uploadedImages.value = []
+    uploadedVideos.value = []
+    audioUrl.value = ''
   }
 }
 
@@ -74,43 +119,64 @@ const clickAttachmentItem = (item: any) => {
 const onImageChange = async (e: Event) => {
   const target = e.target as HTMLInputElement
   try {
-    const file = target.files?.[0]
-    if (file) {
+    Array.from(target.files || []).forEach(async (file) => {
+      const id = uuidv4()
+      const data: UploadResponse = {
+        id,
+        filename: '',
+        meta: {
+          key: 'value',
+        },
+        uploaded: '',
+        requireSignedURLs: false,
+        variants: [],
+        isUploading: true,
+        originalFile: file,
+        content: await readFile(file),
+        fileType: FileTypeEnum.Image,
+      }
+      uploadedImages.value.push(data)
       const response = await upload(file)
-      response.originalFile = file
-      response.fileType = FileTypeEnum.Image
-      uploadedImages.value.push(response)
-    }
+      const index = uploadedImages.value.findIndex((item) => item.id === id)
+      uploadedImages.value[index] = {
+        ...uploadedImages.value[index],
+        ...response,
+        isUploading: false,
+      }
+    })
   } catch (error) {
     console.error(error)
   }
 }
 
-const onAudioChange = async (e: Event) => {
+const onVideoChange = async (e: Event) => {
   const target = e.target as HTMLInputElement
   try {
-    const file = target.files?.[0]
-    if (file) {
+    Array.from(target.files || []).forEach(async (file) => {
+      const id = uuidv4()
+      const data: UploadResponse = {
+        id,
+        filename: '',
+        meta: {
+          key: 'value',
+        },
+        uploaded: '',
+        requireSignedURLs: false,
+        variants: [],
+        isUploading: true,
+        originalFile: file,
+        content: await readFile(file),
+        fileType: FileTypeEnum.Video,
+      }
+      uploadedVideos.value.push(data)
       const response = await upload(file)
-      response.originalFile = file
-      response.fileType = FileTypeEnum.Audio
-      uploadedAudios.value.push(response)
-    }
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const onPDFChange = async (e: Event) => {
-  const target = e.target as HTMLInputElement
-  try {
-    const file = target.files?.[0]
-    if (file) {
-      const response = await upload(file)
-      response.originalFile = file
-      response.fileType = FileTypeEnum.Pdf
-      uploadedPdfs.value.push(response)
-    }
+      const index = uploadedVideos.value.findIndex((item) => item.id === id)
+      uploadedVideos.value[index] = {
+        ...uploadedVideos.value[index],
+        ...response,
+        isUploading: false,
+      }
+    })
   } catch (error) {
     console.error(error)
   }
@@ -120,13 +186,24 @@ const onPDFChange = async (e: Event) => {
 <template>
   <div class="chat-input__wrapper">
     <div v-if="uploadedImages.length > 0" class="chat-input__attachments">
-      <uploaded-attachment
+      <uploaded-image
         v-for="(image, index) in uploadedImages"
-        :key="index"
-        :image="image.variants[0]"
+        :key="image.id"
+        :image="image"
         @remove="uploadedImages.splice(index, 1)"
       />
     </div>
+    <!-- <div v-if="uploadedVideos.length > 0" class="chat-input__attachments">
+      <uploaded-video
+        v-for="(video, index) in uploadedVideos"
+        :key="video.id"
+        :image="video"
+        @remove="uploadedVideos.splice(index, 1)"
+      />
+    </div> -->
+    <!-- <div v-if="audioUrl" class="chat-input__attachments">
+      <audio id="audioPlayback" controls :src="audioUrl"></audio>
+    </div> -->
     <div class="chat-input">
       <ion-popover
         :event="event"
@@ -138,7 +215,10 @@ const onPDFChange = async (e: Event) => {
           <ion-item
             v-for="(item, index) in UPLOAD_ITEMS"
             :key="index"
-            class="chat-input__attach-item"
+            :class="{
+              'chat-input__attach-item': true,
+              'chat-input__attach-item--disabled': item.disabled,
+            }"
             @click="clickAttachmentItem(item)"
           >
             <i :class="item.icon"></i>
@@ -154,21 +234,31 @@ const onPDFChange = async (e: Event) => {
           :disabled="disabled"
           @keydown="handleKeyPress"
         ></ion-textarea>
-        <i class="icon-icon chat-input__icon"></i>
         <button
-          class="chat-input__send"
-          :disabled="disabledSend"
-          @click="onSendClick"
+          v-if="isRecording"
+          class="chat-input__stop-recording"
+          :disabled="!isRecording"
+          @click="onStopRecording"
         >
-          <i class="icon-arrow-up"></i>
+          <i class="icon-stop"></i>
         </button>
+        <template v-else>
+          <i class="icon-icon chat-input__icon"></i>
+          <button
+            class="chat-input__send"
+            :disabled="disabledSend"
+            @click="onSendClick"
+          >
+            <i class="icon-arrow-up"></i>
+          </button>
+        </template>
       </div>
       <input
-        ref="pdfInput"
+        ref="videoInput"
         type="file"
-        accept="application/pdf"
+        accept="video/*"
         style="display: none"
-        @change="onPDFChange"
+        @change="onVideoChange"
       />
       <input
         ref="imageInput"
@@ -176,13 +266,6 @@ const onPDFChange = async (e: Event) => {
         accept="image/*"
         style="display: none"
         @change="onImageChange"
-      />
-      <input
-        ref="audioInput"
-        type="file"
-        accept="audio/*"
-        style="display: none"
-        @change="onAudioChange"
       />
     </div>
   </div>

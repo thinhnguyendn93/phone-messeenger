@@ -81,6 +81,7 @@ interface Message {
   timeCreated: string
   direction: string
   showDate?: boolean
+  media?: Media
 }
 
 export interface Communication {
@@ -105,4 +106,17 @@ export interface UploadResponse {
   variants: string[]
   originalFile: File
   fileType: string
+  content?: string
+  isUploading?: boolean
+}
+
+export interface ChatInputSend {
+  text: string
+  images: UploadResponse[]
+  videos: UploadResponse[]
+  audio: string
+}
+
+export interface Media {
+  image: string;
 }

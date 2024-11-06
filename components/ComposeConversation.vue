@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { usePhoneServices } from '~/services/use-phone-services'
+import type { ChatInputSend } from '~/types/app'
 
 const { sendMessage } = usePhoneServices()
 
@@ -15,9 +16,15 @@ const toPhones = computed(() => {
   })
 })
 
-const onSend = async (text: string) => {
+const onSend = async (data: ChatInputSend) => {
   try {
-    const response = await sendMessage(toPhones.value, text)
+    const media =
+      data.images.length > 0
+        ? {
+            image: data.images[0].variants[0],
+          }
+        : undefined
+    const response = await sendMessage(toPhones.value, data.text, media)
     if (response) {
       emits('createConversation')
     }

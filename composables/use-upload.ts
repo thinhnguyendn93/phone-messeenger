@@ -20,7 +20,7 @@ export function useUpload() {
     }
     const data = await $fetch('/pinger/attachments/upload', opts)
     const response = typeof data === 'string' ? JSON.parse(data) : data
-    return response as UploadResponse
+    return response?.result as UploadResponse
   }
 
   return {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { usePhoneServices } from '~/services/use-phone-services'
-import type { Communication } from '~/types/app'
+import type { ChatInputSend, Communication } from '~/types/app'
 import { formatDate, formatTime } from '~/utils/helper'
 
 const { sendMessage } = usePhoneServices()
@@ -21,9 +21,19 @@ const scrollToLastMessage = () => {
   }, 200)
 }
 
-const onSend = async (text: string) => {
-  await sendMessage(props.conversation.to, text)
-  scrollToLastMessage()
+const onSend = async (data: ChatInputSend) => {
+  try {
+    const media =
+      data.images.length > 0
+        ? {
+            image: data.images[0].variants[0],
+          }
+        : undefined
+    await sendMessage(props.conversation.to, data.text, media)
+    scrollToLastMessage()
+  } catch {
+    //
+  }
 }
 
 onMounted(() => {
@@ -53,8 +63,17 @@ onMounted(() => {
                   'message--received': message.direction === 'in',
                 }"
               >
-                <div class="message__content">
-                  {{ message.text }}
+                <div class="message__wrapper">
+                  <div class="message__media">
+                    <img
+                      v-if="message.media?.image"
+                      :src="message.media.image"
+                      alt="media"
+                    />
+                  </div>
+                  <div v-if="message.text" class="message__content">
+                    {{ message.text }}
+                  </div>
                 </div>
               </ion-label>
             </ion-item>

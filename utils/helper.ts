@@ -34,6 +34,7 @@ export const groupCommunications = (
         myStatus: message.myStatus,
         timeCreated: message.timeCreated,
         direction: 'out',
+        media: message.media,
       })
     }
   }
@@ -56,6 +57,7 @@ export const groupCommunications = (
           from: message.from,
           to: message.to,
           messages: [],
+          media: message.media,
           timeCreated:
             currentTime > message.timeCreated
               ? currentTime
@@ -67,6 +69,7 @@ export const groupCommunications = (
         id: message.id,
         myStatus: message.myStatus,
         timeCreated: message.timeCreated,
+        media: message.media,
         direction: 'in',
       })
     }
@@ -80,6 +83,7 @@ export const groupCommunications = (
     to: group.to,
     messages: group.messages,
     timeCreated: group.timeCreated,
+    media: group.media,
   }))
   return results
 }
@@ -132,5 +136,13 @@ export const readFile = (file: File): Promise<string> => {
       }
     }
     reader.readAsDataURL(file)
+  })
+}
+
+export const uuidv4 = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
   })
 }
