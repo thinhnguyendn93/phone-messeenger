@@ -5,7 +5,9 @@ const { currentPingerPhone } = storeToRefs(userStore)
 <template>
   <div class="app-layout">
     <div class="header">
-      <img src="/logo.svg" alt="Logo" class="logo" />
+      <nuxt-link to="/">
+        <img src="/logo.svg" alt="Logo" class="logo" />
+      </nuxt-link>
       <h1>{{ currentPingerPhone?.phoneNumber }}</h1>
     </div>
     <div class="content">

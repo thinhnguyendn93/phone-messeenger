@@ -5,7 +5,7 @@ import type { PingerPhone, User, UserStore } from '~/types/app'
 export const useUserStore = defineStore('user', {
   state: (): UserStore => ({
     user: {
-      id: '6728fc87f1f3a97a9fc76369',
+      id: '',
       role: '',
       username: '',
       phoneNumber: '',
@@ -53,6 +53,9 @@ export const useUserStore = defineStore('user', {
     storage: persistedState.localStorage,
   },
   actions: {
+    setUserId(id: string) {
+      this.user.id = id
+    },
     getUserId() {
       return this.user.id
     },
