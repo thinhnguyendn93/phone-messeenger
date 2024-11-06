@@ -1,3 +1,7 @@
+.app-layout {
+  background-color: white;
+}
+
 .home {
   display: flex;
   flex-wrap: nowrap;
@@ -211,6 +215,8 @@
 
     .message__content {
       justify-content: flex-start;
+      background-color: #d9d9d9;
+      color: black !important;
     }
 
     .message__media {
