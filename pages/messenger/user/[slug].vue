@@ -15,6 +15,47 @@ const FETCH_CONVERSATION_INTERVAL = 5000
 const interval = ref<NodeJS.Timeout>()
 const slug = route.params.slug
 const isLoading = ref(true)
+const isOpenConversationContext = ref(false)
+const event = ref<Event>()
+
+const onRenameClick = () => {
+  console.log('rename')
+}
+
+const onDeleteConversationClick = () => {
+  console.log('delete')
+}
+
+const onBlockNumberClick = () => {
+  console.log('block')
+}
+
+const onSetTextToneClick = () => {
+  console.log('set text tone')
+}
+
+const CONVERSATION_OPTIONS = [
+  {
+    text: 'Rename',
+    disabled: false,
+    onClick: onRenameClick,
+  },
+  {
+    text: 'Delete Conversation',
+    disabled: false,
+    onClick: onDeleteConversationClick,
+  },
+  {
+    text: 'Block Number',
+    disabled: false,
+    onClick: onBlockNumberClick,
+  },
+  {
+    text: 'Set Text Tone',
+    disabled: false,
+    onClick: onSetTextToneClick,
+  },
+]
 
 definePageMeta({
   pageTransition: {
@@ -80,11 +121,39 @@ const onConversationCreated = () => {
   selectedCommunicationIndex.value = communications.value.length - 1
   isComposingNew.value = false
 }
+
+const onMoreClick = (e: Event) => {
+  e.stopPropagation()
+  isOpenConversationContext.value = true
+  event.value = e
+}
+
+const onItemClicked = (item: any) => {
+  item.onClick()
+  isOpenConversationContext.value = false
+}
 </script>
 
 <template>
   <div class="home">
     <loading-spin v-if="isLoading" />
+    <ion-popover
+      :event="event"
+      :is-open="isOpenConversationContext"
+      @did-dismiss="isOpenConversationContext = false"
+    >
+      <ion-list lines="none">
+        <div
+          v-for="(item, index) in CONVERSATION_OPTIONS"
+          :key="index"
+          @click="onItemClicked(item)"
+        >
+          <ion-item button>
+            <ion-label>{{ item.text }}</ion-label>
+          </ion-item>
+        </div>
+      </ion-list>
+    </ion-popover>
     <div class="home__left-content">
       <div class="conversation">
         <div class="conversation__header">
@@ -113,10 +182,16 @@ const onConversationCreated = () => {
                   <div class="messages">
                     <div class="messages__info">
                       <h2>{{ item.to.map((x) => x.name).join(', ') }}</h2>
-                      <p>{{ item.messages[0]?.text }}</p>
+                      <div class="messages__description">
+                        <p>{{ item.messages[0]?.text }}</p>
+                      </div>
                     </div>
                     <div class="messages__time">
                       <p>{{ formatTime(item.timeCreated) }}</p>
+                      <i
+                        class="icon-more-horizontal"
+                        @click="onMoreClick($event)"
+                      />
                     </div>
                   </div>
                 </ion-label>
@@ -147,8 +222,19 @@ const onConversationCreated = () => {
   </div>
 </template>
 <style scoped>
+ion-popover {
+  --width: 180px;
+}
 ion-toast {
   --width: 300px;
+}
+
+ion-item {
+  --background-hover: var(--ion-color-white-smoke);
+}
+
+ion-label {
+  font-size: 14px !important;
 }
 
 .loading {

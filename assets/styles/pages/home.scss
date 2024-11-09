@@ -75,6 +75,12 @@
         }
       }
     }
+
+    &:hover {
+      .messages__time i {
+        display: block;
+      }
+    }
   }
 
   &__conversation-info {
@@ -122,6 +128,19 @@
     margin-left: 4px;
     margin-bottom: 0;
     margin-left: 8px;
+    position: relative;
+
+    i {
+      width: 32px;
+      font-size: 32px;
+      display: none;
+      position: absolute;
+
+      &:hover {
+        cursor: pointer;
+        color: var(--pinger-app-primary);
+      }
+    }
 
     p {
       font-style: normal;

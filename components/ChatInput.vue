@@ -307,7 +307,7 @@ const onVideoChange = async (e: Event) => {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 ion-popover {
   --width: 180px;
 }
