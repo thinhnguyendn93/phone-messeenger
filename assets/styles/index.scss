@@ -1,10 +1,14 @@
 @import "./base/ionic.scss";
 @import "./components/layout.scss";
+@import "./components/loading.scss";
 @import "./components/uploaded-attachment.scss";
 @import "./components/chat-input.scss";
 @import "./components/new-conversation-input.scss";
+@import "./components/emoji-popover.scss";
 @import "./custom/ionic.scss";
 @import "./pages/home.scss";
+
+@import "vue3-emoji-picker/css";
 
 :root {
   font-family: "Inter", sans-serif;

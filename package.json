@@ -33,6 +33,7 @@
     "v-lazy-image": "2.1.1",
     "vee-validate": "4.13.2",
     "vue": "3.4.38",
+    "vue3-emoji-picker": "^1.1.8",
     "yup": "1.4.0"
   },
   "devDependencies": {

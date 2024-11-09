@@ -1,0 +1,10 @@
+.emoji-popover {
+  display: flex;
+  justify-content: center;
+
+  &__icon {
+    font-size: 24px;
+    color: #888;
+    cursor: pointer;
+  }
+}

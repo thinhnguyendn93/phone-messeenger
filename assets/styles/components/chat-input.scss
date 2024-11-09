@@ -7,6 +7,7 @@
     display: flex;
     gap: 4px;
     flex-wrap: wrap;
+    position: relative;
   }
 
   &__stop-recording {
@@ -81,6 +82,7 @@
 
   &__attach-item {
     cursor: pointer;
+    height: 40px;
 
     &--disabled {
       cursor: not-allowed;

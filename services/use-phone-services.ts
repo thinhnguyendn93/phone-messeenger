@@ -11,10 +11,13 @@ export const usePhoneServices = () => {
   const sendMessage = async (toPhones: any, message: string, media?: Media) => {
     try {
       const currentPhone = userStore.getCurrentPingerPhone()
-      const MESSAGE_API_BODY = {
+      const hasMedia = Object.values(media || {}).filter((m) => m).length > 0
+      const MESSAGE_API_BODY: any = {
         to: toPhones,
         text: message,
-        media,
+      }
+      if (hasMedia) {
+        MESSAGE_API_BODY.media = media
       }
       const response = await post<
         typeof MESSAGE_API_BODY,

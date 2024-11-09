@@ -19,46 +19,79 @@ const uploadedImages = ref<UploadResponse[]>([])
 const uploadedVideos = ref<UploadResponse[]>([])
 
 const mediaRecorder = ref<MediaRecorder>()
-// const audioChunks = ref<Blob[]>([])
+const audioChunks = ref<Blob[]>([])
 const isRecording = ref(false)
-const audioUrl = ref<string>()
+const uploadedAudio = ref<UploadResponse>()
 
 const disabledSend = computed(() => {
   if (uploadedImages.value.length > 0) {
     return uploadedImages.value.some((item) => item.isUploading)
   }
 
-  return !value.value && uploadedVideos.value.length === 0 && !audioUrl.value
+  if (uploadedVideos.value.length > 0) {
+    return uploadedVideos.value.some((item) => item.isUploading)
+  }
+
+  if (uploadedAudio.value) {
+    return uploadedAudio.value.isUploading
+  }
+
+  return !value.value
 })
 
-// const uploadPdfClick = () => {
-//   videoInput.value?.click()
-// }
+const onSelectEmoji = (emoji: string) => {
+  if (!value.value) {
+    value.value = emoji
+  } else {
+    value.value += emoji
+  }
+}
+
+const uploadVideoClick = () => {
+  videoInput.value?.click()
+}
 
 const uploadImageClick = () => {
   imageInput.value?.click()
 }
 
-// const uploadAudioClick = async () => {
-//   isRecording.value = true
-//   audioUrl.value = ''
-//   const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-//   mediaRecorder.value = new MediaRecorder(stream)
+const uploadAudioClick = async () => {
+  isRecording.value = true
+  uploadedAudio.value = undefined
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+  mediaRecorder.value = new MediaRecorder(stream)
 
-//   mediaRecorder.value.ondataavailable = (event) => {
-//     audioChunks.value.push(event.data)
-//   }
+  mediaRecorder.value.ondataavailable = (event) => {
+    audioChunks.value.push(event.data)
+  }
 
-//   mediaRecorder.value.onstop = () => {
-//     isRecording.value = false
-//     const audioBlob = new Blob(audioChunks.value, { type: 'audio/wav' })
-//     audioUrl.value = URL.createObjectURL(audioBlob)
-//     audioChunks.value = []
-//     console.log('Recording stopped, audio available.')
-//   }
+  mediaRecorder.value.onstop = async () => {
+    isRecording.value = false
 
-//   mediaRecorder.value.start()
-// }
+    const audioBlob = new Blob(audioChunks.value, { type: 'audio/wav' })
+    const audioFile = new File([audioBlob], `${uuidv4()}.wav`, {
+      type: 'audio/wav',
+    })
+    uploadedAudio.value = {
+      id: uuidv4(),
+      url: '',
+      isUploading: true,
+      originalFile: audioFile,
+      content: '',
+      fileType: FileTypeEnum.Audio,
+    }
+    audioChunks.value = []
+    const response = await upload(audioFile)
+    uploadedAudio.value = {
+      ...uploadedAudio.value,
+      ...response,
+      isUploading: false,
+    }
+    console.log('Recording stopped, audio available.')
+  }
+
+  mediaRecorder.value.start()
+}
 
 const onStopRecording = () => {
   mediaRecorder.value?.stop()
@@ -67,19 +100,19 @@ const onStopRecording = () => {
 
 // TODO: video & audio upload will be implemented later
 const UPLOAD_ITEMS = computed(() => [
-  // { icon: 'icon-video', text: 'Video', onClick: uploadPdfClick },
+  { icon: 'icon-video', text: 'Video', onClick: uploadVideoClick },
   {
     icon: 'icon-image',
     text: 'Image',
     onClick: uploadImageClick,
     disabled: uploadedImages.value.length > 0,
   },
-  // {
-  //   icon: 'icon-audio',
-  //   text: 'Audio',
-  //   onClick: uploadAudioClick,
-  //   disabled: Boolean(audioUrl.value),
-  // },
+  {
+    icon: 'icon-audio',
+    text: 'Audio',
+    onClick: uploadAudioClick,
+    disabled: false,
+  },
 ])
 
 const onSendClick = () => {
@@ -88,12 +121,12 @@ const onSendClick = () => {
       text: value.value,
       images: uploadedImages.value,
       videos: uploadedVideos.value,
-      audio: audioUrl.value,
+      audio: uploadedAudio.value,
     })
     value.value = undefined
     uploadedImages.value = []
     uploadedVideos.value = []
-    audioUrl.value = ''
+    uploadedAudio.value = undefined
   }
 }
 
@@ -118,18 +151,13 @@ const clickAttachmentItem = (item: any) => {
 
 const onImageChange = async (e: Event) => {
   const target = e.target as HTMLInputElement
+  uploadedImages.value = []
   try {
     Array.from(target.files || []).forEach(async (file) => {
       const id = uuidv4()
       const data: UploadResponse = {
         id,
-        filename: '',
-        meta: {
-          key: 'value',
-        },
-        uploaded: '',
-        requireSignedURLs: false,
-        variants: [],
+        url: '',
         isUploading: true,
         originalFile: file,
         content: await readFile(file),
@@ -151,32 +179,27 @@ const onImageChange = async (e: Event) => {
 
 const onVideoChange = async (e: Event) => {
   const target = e.target as HTMLInputElement
+  uploadedVideos.value = []
   try {
-    Array.from(target.files || []).forEach(async (file) => {
-      const id = uuidv4()
-      const data: UploadResponse = {
-        id,
-        filename: '',
-        meta: {
-          key: 'value',
-        },
-        uploaded: '',
-        requireSignedURLs: false,
-        variants: [],
-        isUploading: true,
-        originalFile: file,
-        content: await readFile(file),
-        fileType: FileTypeEnum.Video,
-      }
-      uploadedVideos.value.push(data)
-      const response = await upload(file)
-      const index = uploadedVideos.value.findIndex((item) => item.id === id)
-      uploadedVideos.value[index] = {
-        ...uploadedVideos.value[index],
-        ...response,
-        isUploading: false,
-      }
-    })
+    const file = target.files?.[0]
+    if (!file) return
+    const id = uuidv4()
+    const data: UploadResponse = {
+      id,
+      url: '',
+      isUploading: true,
+      originalFile: file,
+      content: await readFile(file),
+      fileType: FileTypeEnum.Video,
+    }
+    uploadedVideos.value.push(data)
+    const response = await upload(file)
+    const index = uploadedVideos.value.findIndex((item) => item.id === id)
+    uploadedVideos.value[index] = {
+      ...uploadedVideos.value[index],
+      ...response,
+      isUploading: false,
+    }
   } catch (error) {
     console.error(error)
   }
@@ -193,17 +216,31 @@ const onVideoChange = async (e: Event) => {
         @remove="uploadedImages.splice(index, 1)"
       />
     </div>
-    <!-- <div v-if="uploadedVideos.length > 0" class="chat-input__attachments">
-      <uploaded-video
+    <div v-if="uploadedVideos.length > 0" class="chat-input__attachments">
+      <div
+        v-for="(video, index) in uploadedVideos"
+        :key="index"
+        class="uploaded-image p-0"
+      >
+        <video :src="video.url" alt="video" class="max-h-[120px]" />
+        <loading-spin v-if="video.isUploading" />
+        <i
+          v-else
+          class="icon-close chat-input__attachment-close"
+          @click="uploadedVideos.splice(index, 1)"
+        ></i>
+      </div>
+      <uploaded-videos
         v-for="(video, index) in uploadedVideos"
         :key="video.id"
-        :image="video"
+        :video="video"
         @remove="uploadedVideos.splice(index, 1)"
       />
-    </div> -->
-    <!-- <div v-if="audioUrl" class="chat-input__attachments">
-      <audio id="audioPlayback" controls :src="audioUrl"></audio>
-    </div> -->
+    </div>
+    <div v-if="uploadedAudio" class="chat-input__attachments">
+      <loading-spin v-if="uploadedAudio.isUploading" />
+      <audio id="audioPlayback" controls :src="uploadedAudio.url"></audio>
+    </div>
     <div class="chat-input">
       <ion-popover
         :event="event"
@@ -243,7 +280,7 @@ const onVideoChange = async (e: Event) => {
           <i class="icon-stop"></i>
         </button>
         <template v-else>
-          <i class="icon-icon chat-input__icon"></i>
+          <emoji-popover @select="onSelectEmoji" />
           <button
             class="chat-input__send"
             :disabled="disabledSend"
@@ -273,5 +310,9 @@ const onVideoChange = async (e: Event) => {
 <style>
 ion-popover {
   --width: 180px;
+}
+
+ion-popover::part(backdrop) {
+  background-color: transparent;
 }
 </style>

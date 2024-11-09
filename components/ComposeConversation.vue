@@ -18,13 +18,11 @@ const toPhones = computed(() => {
 
 const onSend = async (data: ChatInputSend) => {
   try {
-    const media =
-      data.images.length > 0
-        ? {
-            image: data.images[0].variants[0],
-          }
-        : undefined
-    const response = await sendMessage(toPhones.value, data.text, media)
+    const response = await sendMessage(toPhones.value, data.text, {
+      image: data.images[0]?.url,
+      audio: data.audio?.url,
+      video: data.videos[0]?.url,
+    })
     if (response) {
       emits('createConversation')
     }

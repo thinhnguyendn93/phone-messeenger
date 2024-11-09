@@ -23,13 +23,11 @@ const scrollToLastMessage = () => {
 
 const onSend = async (data: ChatInputSend) => {
   try {
-    const media =
-      data.images.length > 0
-        ? {
-            image: data.images[0].variants[0],
-          }
-        : undefined
-    await sendMessage(props.conversation.to, data.text, media)
+    await sendMessage(props.conversation.to, data.text, {
+      image: data.images[0]?.url,
+      audio: data.audio?.url,
+      video: data.videos[0]?.url,
+    })
     scrollToLastMessage()
   } catch {
     //
@@ -64,12 +62,14 @@ onMounted(() => {
                 }"
               >
                 <div class="message__wrapper">
-                  <div class="message__media">
-                    <img
-                      v-if="message.media?.image"
-                      :src="message.media.image"
-                      alt="media"
-                    />
+                  <div v-if="message.media?.image" class="message__media">
+                    <img :src="message.media.image" alt="media" />
+                  </div>
+                  <div v-if="message.media?.audio" class="message__media">
+                    <audio controls :src="message.media.audio" />
+                  </div>
+                  <div v-if="message.media?.video" class="message__media">
+                    <video controls :src="message.media.video" />
                   </div>
                   <div v-if="message.text" class="message__content">
                     {{ message.text }}

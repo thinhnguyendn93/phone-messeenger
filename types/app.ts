@@ -93,30 +93,32 @@ export interface Communication {
   timeCreated: string
 }
 
-interface Meta {
-  key: string
-}
-
 export interface UploadResponse {
   id: string
-  filename: string
-  meta: Meta
-  uploaded: string
-  requireSignedURLs: boolean
-  variants: string[]
   originalFile: File
   fileType: string
   content?: string
   isUploading?: boolean
+  url: string
 }
 
 export interface ChatInputSend {
   text: string
   images: UploadResponse[]
   videos: UploadResponse[]
-  audio: string
+  audio: UploadResponse
 }
 
 export interface Media {
-  image: string;
+  image: string
+  audio: string
+  video: string
+}
+
+export interface Emoji {
+  n: string[]
+  u: string
+  r: string
+  t: string
+  i: string
 }
