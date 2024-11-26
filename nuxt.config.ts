@@ -13,6 +13,9 @@ export default defineNuxtConfig({
     server: !isProd,
     client: !isProd,
   },
+  build: {
+    transpile: ['vue3-emoji-picker']
+  },
   modules: [
     '@nuxt/devtools',
     '@nuxt/image',
